@@ -50,6 +50,20 @@ function switchPane(key)
     )
 end
 
+function terminalCommand(key, cmd)
+  return remap(
+      {'cmd', 'ctrl'},
+      key,
+      function ()
+        hs.eventtap.keyStrokes(cmd)
+        hs.timer.doAfter(0.1, function ()
+          hs.eventtap.keyStroke({}, 'return', 1000)
+        end)
+      end
+    )
+
+end
+
 
 local scenarioShortcuts = {
   firefox = {
@@ -61,8 +75,16 @@ local scenarioShortcuts = {
     paneLeft = switchPane('h'),
     paneUp = switchPane('k'),
     paneDown = switchPane('j'),
+  },
+  terminal = {
+    lazygit = terminalCommand('u', 'lazygit'),
+    termscp = terminalCommand('i', 'termscp'),
+    lfcd = terminalCommand('o', 'lfcd'),
+    k9s = terminalCommand('9', 'k9s')
   }
 }
+
+-- TODO enable a list and disable others
 
 local function enableScenarioShortcuts(scenario)
   for _, value in pairs(scenarioShortcuts[scenario]) do
@@ -89,6 +111,7 @@ function applicationWatcher(appName, eventType, appObject)
         if (appName == "iTerm2") then
             showFocusAlert("TERMINAL")
             enableScenarioShortcuts('tmux')
+            enableScenarioShortcuts('terminal')
             disableScenarioShortcuts('firefox')
         end
         if (appName == "IntelliJ IDEA") then
@@ -98,10 +121,13 @@ function applicationWatcher(appName, eventType, appObject)
             showFocusAlert("FIREFOX")
             enableScenarioShortcuts('firefox')
             disableScenarioShortcuts('tmux')
+            disableScenarioShortcuts('terminal')
         end
         if (appName == "Joplin") then
             showFocusAlert("JOPLIN")
             enableScenarioShortcuts('joplin')
+            disableScenarioShortcuts('tmux')
+            disableScenarioShortcuts('terminal')
         end
     end
       print('current' .. serializeTable(scenarioShortcuts))
