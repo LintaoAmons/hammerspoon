@@ -2,7 +2,7 @@ function showFocusAlert(content)
     hs.alert.show(content, hs.alert.defaultStyle, hs.screen.mainScreen(), 0.5)
 end
 
-local function pressFn(mods, key)
+local function keyStroke(mods, key)
 	if key == nil then
 		key = mods
 		mods = {}
@@ -15,14 +15,52 @@ local function remap(mods, key, pressFn)
 	return hs.hotkey.bind(mods, key, pressFn, nil, pressFn)
 end
 
+-- local function test()
+--   return function ()
+--       hs.eventtap.keyStroke({}, ':b', 10)
+--     end
+-- end
+
+-- hs.hotkey.bind({'cmd', 'ctrl'}, 'l', test, nil, test)
+
+function switchPane(key)
+  local paneOption
+
+  if key == 'h' then
+    paneOption = '-L'
+  elseif key == 'j' then
+    paneOption = '-D'
+  elseif key == 'k' then
+    paneOption = '-U'
+  elseif key == 'l' then
+    paneOption = '-R'
+  end
+
+  return remap(
+      {'cmd', 'ctrl'},
+      key,
+      function ()
+        hs.eventtap.keyStroke({'ctrl'}, 'b', 1000)
+        hs.eventtap.keyStroke({'shift'}, ';', 1000)
+        hs.eventtap.keyStrokes("select-pane ".. paneOption)
+        hs.timer.doAfter(0.1, function ()
+          hs.eventtap.keyStroke({}, 'return', 1000)
+        end)
+      end
+    )
+end
+
 
 local scenarioShortcuts = {
   firefox = {
-    nextTab = remap({'cmd', 'ctrl'}, 'l', pressFn({'ctrl'}, 'tab')),
-    prevTab = remap({'cmd', 'ctrl'}, 'h', pressFn({'ctrl', 'shift'}, 'tab'))
+    nextTab = remap({'cmd', 'ctrl'}, 'l', keyStroke({'ctrl'}, 'tab')),
+    prevTab = remap({'cmd', 'ctrl'}, 'h', keyStroke({'ctrl', 'shift'}, 'tab'))
   },
-  test = {
-    testMap = remap({'cmd', 'ctrl'}, 'l', pressFn({'ctrl'}, 'l'))
+  tmux = {
+    paneRight = switchPane('l'),
+    paneLeft = switchPane('h'),
+    paneUp = switchPane('k'),
+    paneDown = switchPane('j'),
   }
 }
 
@@ -50,7 +88,7 @@ function applicationWatcher(appName, eventType, appObject)
         end
         if (appName == "iTerm2") then
             showFocusAlert("TERMINAL")
-            enableScenarioShortcuts('test')
+            enableScenarioShortcuts('tmux')
             disableScenarioShortcuts('firefox')
         end
         if (appName == "IntelliJ IDEA") then
@@ -59,10 +97,11 @@ function applicationWatcher(appName, eventType, appObject)
         if (appName == "Firefox") then
             showFocusAlert("FIREFOX")
             enableScenarioShortcuts('firefox')
-            disableScenarioShortcuts('test')
+            disableScenarioShortcuts('tmux')
         end
         if (appName == "Joplin") then
             showFocusAlert("JOPLIN")
+            enableScenarioShortcuts('joplin')
         end
     end
       print('current' .. serializeTable(scenarioShortcuts))
