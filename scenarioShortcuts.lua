@@ -64,6 +64,7 @@ function terminalCommand(key, cmd)
 
 end
 
+-- lazygit demo
 
 local scenarioShortcuts = {
   firefox = {
@@ -116,6 +117,9 @@ function applicationWatcher(appName, eventType, appObject)
         end
         if (appName == "IntelliJ IDEA") then
             showFocusAlert("IDEA")
+            disableScenarioShortcuts('tmux')
+            disableScenarioShortcuts('terminal')
+            disableScenarioShortcuts('firefox')
         end
         if (appName == "Firefox") then
             showFocusAlert("FIREFOX")
