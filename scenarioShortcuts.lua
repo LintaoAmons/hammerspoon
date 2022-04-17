@@ -73,7 +73,6 @@ local function disableScenarioShortcuts(scenario)
     for _, value in pairs(scenarioShortcuts[scenario]) do
         value:disable()
     end
-    print(serializeTable(scenarioShortcuts))
 end
 
 local function isInTable(table, value)
@@ -121,7 +120,6 @@ function applicationWatcher(appName, eventType, appObject)
             enableScenarios({allScenarios.joplin})
         end
     end
-    print('current' .. serializeTable(scenarioShortcuts))
 end
 
 appWatcher = hs.application.watcher.new(applicationWatcher)
