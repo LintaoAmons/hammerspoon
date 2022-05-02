@@ -1,3 +1,5 @@
+local hyperKey = {'shift', 'alt', 'ctrl', 'cmd'}
+
 function showFocusAlert(content)
     hs.alert.show(content, hs.alert.defaultStyle, hs.screen.mainScreen(), 0.5)
 end
@@ -20,8 +22,17 @@ end
 function tmuxSwitchPane(key)
     return remap({'cmd', 'ctrl'}, key, function()
         hs.eventtap.keyStroke({'ctrl'}, 'b', 1000)
-        hs.timer.doAfter(0.1, function()
+        hs.timer.doAfter(0.2, function()
             hs.eventtap.keyStroke({}, key)
+        end)
+    end)
+end
+
+function tmuxSwitchWindow(windowNumber)
+  return remap(hyperKey, windowNumber, function()
+        hs.eventtap.keyStroke({'ctrl'}, 'b', 1000)
+        hs.timer.doAfter(0.2, function()
+            hs.eventtap.keyStroke({}, windowNumber)
         end)
     end)
 end
@@ -29,7 +40,7 @@ end
 function terminalCommand(key, cmd)
     return remap({'cmd', 'ctrl'}, key, function()
         hs.eventtap.keyStrokes(cmd)
-        hs.timer.doAfter(0.1, function()
+        hs.timer.doAfter(0.2, function()
             hs.eventtap.keyStroke({}, 'return', 1000)
         end)
     end)
@@ -53,6 +64,10 @@ local scenarioShortcuts = {
         paneLeft = tmuxSwitchPane('h'),
         paneUp = tmuxSwitchPane('k'),
         paneDown = tmuxSwitchPane('j'),
+        switchToWindow1 = tmuxSwitchWindow("1"),
+        switchToWindow2 = tmuxSwitchWindow("2"),
+        switchToWindow3 = tmuxSwitchWindow("3"),
+        switchToWindow4 = tmuxSwitchWindow("4"),
 
         -- tui
         lazygit = terminalCommand('u', 'lazygit'),
