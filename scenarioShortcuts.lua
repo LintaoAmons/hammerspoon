@@ -28,13 +28,17 @@ function tmuxSwitchPane(key)
     end)
 end
 
-function tmuxSwitchWindow(windowNumber)
-  return remap(hyperKey, windowNumber, function()
+function tmuxHyperToPrefix(key)
+  return remap(hyperKey, key, function()
         hs.eventtap.keyStroke({'ctrl'}, 'b', 1000)
         hs.timer.doAfter(0.2, function()
-            hs.eventtap.keyStroke({}, windowNumber)
+            hs.eventtap.keyStroke({}, key)
         end)
     end)
+end
+
+function tmuxSwitchWindow(windowNumber)
+  return tmuxHyperToPrefix(windowNumber)
 end
 
 function terminalCommand(key, cmd)
@@ -64,10 +68,11 @@ local scenarioShortcuts = {
         paneLeft = tmuxSwitchPane('h'),
         paneUp = tmuxSwitchPane('k'),
         paneDown = tmuxSwitchPane('j'),
-        switchToWindow1 = tmuxSwitchWindow("1"),
-        switchToWindow2 = tmuxSwitchWindow("2"),
-        switchToWindow3 = tmuxSwitchWindow("3"),
-        switchToWindow4 = tmuxSwitchWindow("4"),
+        switchToWindow1 = tmuxHyperToPrefix("1"),
+        switchToWindow2 = tmuxHyperToPrefix("2"),
+        switchToWindow3 = tmuxHyperToPrefix("3"),
+        switchToWindow4 = tmuxHyperToPrefix("4"),
+        closePane = tmuxHyperToPrefix("x"),
 
         -- tui
         lazygit = terminalCommand('u', 'lazygit'),
