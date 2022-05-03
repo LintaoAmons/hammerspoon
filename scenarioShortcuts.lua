@@ -19,11 +19,14 @@ local function remap(mods, key, pressFn)
     return hs.hotkey.bind(mods, key, pressFn, nil, pressFn)
 end
 
-function tmuxSwitchPane(key)
+function tmuxCmdCtrlToPrefix(key, mods)
+  if mods == nil then
+    mods = {}
+  end
     return remap({'cmd', 'ctrl'}, key, function()
         hs.eventtap.keyStroke({'ctrl'}, 'b', 1000)
         hs.timer.doAfter(0.2, function()
-            hs.eventtap.keyStroke({}, key)
+            hs.eventtap.keyStroke(mods, key)
         end)
     end)
 end
@@ -64,10 +67,12 @@ local scenarioShortcuts = {
     },
     [allScenarios.terminal] = {
         -- tmux
-        paneRight = tmuxSwitchPane('l'),
-        paneLeft = tmuxSwitchPane('h'),
-        paneUp = tmuxSwitchPane('k'),
-        paneDown = tmuxSwitchPane('j'),
+        paneRight = tmuxCmdCtrlToPrefix('l'),
+        paneLeft = tmuxCmdCtrlToPrefix('h'),
+        paneUp = tmuxCmdCtrlToPrefix('k'),
+        paneDown = tmuxCmdCtrlToPrefix('j'),
+        movePaneClockwise = tmuxCmdCtrlToPrefix('[', {'shift'}),
+        movePaneCounterClockwise = tmuxCmdCtrlToPrefix(']', {'shift'}),
         switchToWindow1 = tmuxHyperToPrefix("1"),
         switchToWindow2 = tmuxHyperToPrefix("2"),
         switchToWindow3 = tmuxHyperToPrefix("3"),
