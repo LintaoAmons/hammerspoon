@@ -72,27 +72,22 @@ local scenarioShortcuts = {
         prevTab = remap({'cmd', 'ctrl'}, 'h', keyStroke({'ctrl', 'shift'}, 'tab'))
     },
     [allScenarios.terminal] = {
-        -- tmux
+        -- tmux::session
+        previousSession = tmuxCmdCtrlToPrefix('[', {'shift'}, '9'),
+        nextSession = tmuxCmdCtrlToPrefix(']', {'shift'}, '0'),
+        renameSession = tmuxCmdCtrlToPrefix('m', {'shift'}, '4'),
+        -- tmux::pane
         paneRight = tmuxCmdCtrlToPrefix('l'),
         paneLeft = tmuxCmdCtrlToPrefix('h'),
         paneUp = tmuxCmdCtrlToPrefix('k'),
         paneDown = tmuxCmdCtrlToPrefix('j'),
-        movePaneClockwise = tmuxCmdCtrlToPrefix('[', {'shift'}, '9'),
-        movePaneCounterClockwise = tmuxCmdCtrlToPrefix(']', {'shift'}, '0'),
         switchToNextPane=tmuxCmdCtrlToPrefix('o'),
-
 
         switchToWindow1 = tmuxHyperToPrefix("1"),
         switchToWindow2 = tmuxHyperToPrefix("2"),
         switchToWindow3 = tmuxHyperToPrefix("3"),
         switchToWindow4 = tmuxHyperToPrefix("4"),
         closePane = tmuxHyperToPrefix("x"),
-
-        -- tui
-        lazygit = terminalCommand('u', 'lazygit'),
-    --     termscp = terminalCommand('i', 'termscp'),
-    --     lfcd = terminalCommand('o', 'lfcd'),
-    --     k9s = terminalCommand('9', 'k9s')
     },
     [allScenarios.joplin] = {}
 }
