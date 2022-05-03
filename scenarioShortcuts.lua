@@ -19,16 +19,22 @@ local function remap(mods, key, pressFn)
     return hs.hotkey.bind(mods, key, pressFn, nil, pressFn)
 end
 
-function tmuxCmdCtrlToPrefix(key, mods)
+-- TODO 变成接受两个变量（from, to），变量的类型是 {keycode，mods}
+function tmuxCmdCtrlToPrefix(fromKey, mods, toKey)
   if mods == nil then
     mods = {}
   end
-    return remap({'cmd', 'ctrl'}, key, function()
-        hs.eventtap.keyStroke({'ctrl'}, 'b', 1000)
-        hs.timer.doAfter(0.2, function()
-            hs.eventtap.keyStroke(mods, key)
-        end)
-    end)
+
+  if toKey == nil then
+    toKey = fromKey
+  end
+
+  return remap({'cmd', 'ctrl'}, fromKey, function()
+      hs.eventtap.keyStroke({'ctrl'}, 'b', 1000)
+      hs.timer.doAfter(0.2, function()
+          hs.eventtap.keyStroke(mods, toKey)
+      end)
+  end)
 end
 
 function tmuxHyperToPrefix(key)
@@ -71,8 +77,11 @@ local scenarioShortcuts = {
         paneLeft = tmuxCmdCtrlToPrefix('h'),
         paneUp = tmuxCmdCtrlToPrefix('k'),
         paneDown = tmuxCmdCtrlToPrefix('j'),
-        movePaneClockwise = tmuxCmdCtrlToPrefix('[', {'shift'}),
-        movePaneCounterClockwise = tmuxCmdCtrlToPrefix(']', {'shift'}),
+        movePaneClockwise = tmuxCmdCtrlToPrefix('[', {'shift'}, '9'),
+        movePaneCounterClockwise = tmuxCmdCtrlToPrefix(']', {'shift'}, '0'),
+        switchToNextPane=tmuxCmdCtrlToPrefix('o'),
+
+
         switchToWindow1 = tmuxHyperToPrefix("1"),
         switchToWindow2 = tmuxHyperToPrefix("2"),
         switchToWindow3 = tmuxHyperToPrefix("3"),
@@ -81,9 +90,9 @@ local scenarioShortcuts = {
 
         -- tui
         lazygit = terminalCommand('u', 'lazygit'),
-        termscp = terminalCommand('i', 'termscp'),
-        lfcd = terminalCommand('o', 'lfcd'),
-        k9s = terminalCommand('9', 'k9s')
+    --     termscp = terminalCommand('i', 'termscp'),
+    --     lfcd = terminalCommand('o', 'lfcd'),
+    --     k9s = terminalCommand('9', 'k9s')
     },
     [allScenarios.joplin] = {}
 }
