@@ -1,8 +1,19 @@
 local hyperKey = {'shift', 'alt', 'ctrl', 'cmd'}
 
+local function remap(mods, key, pressFn)
+    return hs.hotkey.bind(mods, key, pressFn, nil, pressFn)
+end
+
 function showFocusAlert(content)
     hs.alert.show(content, hs.alert.defaultStyle, hs.screen.mainScreen(), 0.5)
 end
+
+function showCurrentTime()
+  local prettyNow = os.date('%A              📅%B %d %Y              🕐%I:%M:%S %p')
+  hs.alert.show(prettyNow, hs.alert.defaultStyle, hs.screen.mainScreen(), 1.5)
+end
+
+remap(hyperKey, 't', showCurrentTime)
 
 local function keyStroke(mods, key)
     if key == nil then
@@ -15,9 +26,6 @@ local function keyStroke(mods, key)
     end
 end
 
-local function remap(mods, key, pressFn)
-    return hs.hotkey.bind(mods, key, pressFn, nil, pressFn)
-end
 
 -- TODO 变成接受两个变量（from, to），变量的类型是 {keycode，mods}
 function tmuxCmdCtrlToPrefix(fromKey, mods, toKey)
@@ -61,15 +69,19 @@ function terminalCommand(key, cmd)
 end
 
 local allScenarios = {
+    everEnable = 'everEnable',
     firefox = "firefox",
     terminal = "terminal",
     joplin = "joplin"
 }
 
 local scenarioShortcuts = {
+    [allScenarios.everEnable] = {
+      toggleKeyboardCursor = remap(hyperKey, 'c', keyStroke({'alt', 'cmd'}, 'c'))
+    },
     [allScenarios.firefox] = {
         nextTab = remap({'cmd', 'ctrl'}, 'l', keyStroke({'ctrl'}, 'tab')),
-        prevTab = remap({'cmd', 'ctrl'}, 'h', keyStroke({'ctrl', 'shift'}, 'tab'))
+        prevTab = remap({'cmd', 'ctrl'}, 'h', keyStroke({'ctrl', 'shift'}, 'tab')),
     },
     [allScenarios.terminal] = {
         -- tmux::session
@@ -113,7 +125,7 @@ local function isInTable(table, value)
     return false
 end
 
-local function enableScenarios(scenarios)
+local function enableAndDisableScenarios(scenarios)
     scenarios = scenarios or {}
     for _, value in pairs(allScenarios) do
         if isInTable(scenarios, value) then
@@ -134,19 +146,19 @@ function applicationWatcher(appName, eventType, appObject)
         end
         if (appName == "iTerm2") then
             showFocusAlert("TERMINAL")
-            enableScenarios({allScenarios.terminal})
+            enableAndDisableScenarios({allScenarios.terminal, allScenarios.everEnable})
         end
         if (appName == "IntelliJ IDEA") then
             showFocusAlert("IDEA")
-            enableScenarios()
+            enableAndDisableScenarios({allScenarios.everEnable})
         end
         if (appName == "Firefox") then
             showFocusAlert("FIREFOX")
-            enableScenarios({allScenarios.firefox})
+            enableAndDisableScenarios({allScenarios.firefox, allScenarios.everEnable})
         end
         if (appName == "Joplin") then
             showFocusAlert("JOPLIN")
-            enableScenarios({allScenarios.joplin})
+            enableAndDisableScenarios({allScenarios.joplin, allScenarios.everEnable})
         end
     end
 end
