@@ -93,7 +93,6 @@ local scenarioShortcuts = {
 		paneDown = tmuxCmdCtrlToPrefix("j"),
 		switchToNextPane = tmuxCmdCtrlToPrefix("o", {}, "z"),
 		maximizePane = tmuxCmdCtrlToPrefix("o", {}, "z"),
-    maximizePane = tmuxCmdCtrlToPrefix("i", {}, "o"),
 
 		switchToWindow1 = tmuxHyperToPrefix("1"),
 		switchToWindow2 = tmuxHyperToPrefix("2"),
