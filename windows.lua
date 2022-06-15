@@ -39,14 +39,14 @@ end
 
 hs.hotkey.bind(hyperKey, "e", toggle_window_full_screen)
 
-local switcher = hs.window.switcher.new(hs.window.filter.new():setCurrentSpace(true):setDefaultFilter({}))
+-- local switcher = hs.window.switcher.new(hs.window.filter.new():setCurrentSpace(true):setDefaultFilter({}))
 
-hs.hotkey.bind(hyperKey, "m", "Next window", function()
-	switcher:next()
-end)
-hs.hotkey.bind(hyperKey, "n", "Previous window", function()
-	switcher:previous()
-end)
+-- hs.hotkey.bind(hyperKey, "m", "Next window", function()
+-- 	switcher:next()
+-- end)
+-- hs.hotkey.bind(hyperKey, "n", "Previous window", function()
+-- 	switcher:previous()
+-- end)
 
 -- -- quarter of screen
 -- --[[
