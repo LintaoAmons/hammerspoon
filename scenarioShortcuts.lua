@@ -82,6 +82,7 @@ local scenarioShortcuts = {
 		prevTab = remap({ "cmd", "ctrl" }, "h", keyStroke({ "ctrl", "shift" }, "tab")),
 	},
 	[allScenarios.terminal] = {
+		showAllSessionWindowPane = tmuxCmdCtrlToPrefix("i", { }, "w"),
 		-- tmux::session
 		previousSession = tmuxCmdCtrlToPrefix("[", { "shift" }, "9"),
 		nextSession = tmuxCmdCtrlToPrefix("]", { "shift" }, "0"),
