@@ -86,7 +86,6 @@ local scenarioShortcuts = {
 		-- tmux::session
 		previousSession = tmuxCmdCtrlToPrefix("[", { "shift" }, "9"),
 		nextSession = tmuxCmdCtrlToPrefix("]", { "shift" }, "0"),
-		renameSession = tmuxCmdCtrlToPrefix("m", { "shift" }, "4"),
 		-- tmux::pane
 		paneRight = tmuxCmdCtrlToPrefix("l"),
 		paneLeft = tmuxCmdCtrlToPrefix("h"),
