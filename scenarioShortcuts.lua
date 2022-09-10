@@ -143,7 +143,7 @@ function applicationWatcher(appName, eventType, appObject)
 			-- Bring all Finder windows forward when one gets activated
 			appObject:selectMenuItem({ "Window", "Bring All to Front" })
 		end
-		if appName == "iTerm2" then
+		if appName == "Alacritty" then
 			showFocusAlert("TERMINAL")
 			enableAndDisableScenarios({ allScenarios.terminal, allScenarios.everEnable })
 		end
